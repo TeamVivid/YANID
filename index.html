@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="ember">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>YANID – Yet Another Non Intrusive Downloader</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27%3E%3Cpath d=%27M9 3h6v8h4l-7 8-7-8h4z%27 fill=%27%23ff6b35%27/%3E%3C/svg%3E">
+</head>
+<body>
+<div class="top-actions">
+  <button id="settingsBtn" class="nav-link" title="Settings" aria-label="Settings">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 00.12-.61l-1.92-3.32a.488.488 0 00-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 00-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 00-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+  </button>
+  <button id="theme" class="nav-link theme-fixed" title="Switch theme" aria-label="Switch theme">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3a9 9 0 109 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 01-4.4 2.26 5.403 5.403 0 01-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/></svg>
+  </button>
+</div>
+
+<main>
+  <section class="hero">
+    <div class="brand">
+      <svg width="52" height="52" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6v8h4l-7 8-7-8h4z"/></svg>
+      <span>YANID</span>
+    </div>
+    <p class="tagline">Yet Another Non Intrusive Downloader</p>
+  </section>
+
+  <div class="pill">
+    <input id="url" type="text" placeholder="YouTube URL here …" autocomplete="off" spellcheck="false">
+    <button id="go" type="button" aria-label="Analyze">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="5 12 12 19 19 12"/></svg>
+    </button>
+  </div>
+  <div class="error-msg" id="err"></div>
+  <div class="loading" id="loading"><div class="spinner"></div></div>
+
+  <section id="panel">
+    <div class="vinfo">
+      <div class="vthumb"><img id="vimg" alt="" style="display:none"><span id="vdur">0:00</span></div>
+      <div class="vtext">
+        <div class="vtitle" id="vtitle"></div>
+        <div class="vauthor" id="vauthor"></div>
+        <div class="vmeta" id="vmeta"></div>
+      </div>
+    </div>
+
+    <div id="cfg" class="basic">
+      <div class="modetog" id="modetog" role="group" aria-label="Mode">
+        <button type="button" data-m="basic" class="active">Basic</button>
+        <button type="button" data-m="advanced">Advanced</button>
+      </div>
+      <div class="card-tabs" id="tabs">
+        <button class="card-tab active" data-t="dl">Download</button>
+        <button class="card-tab" data-t="subs">Subtitles</button>
+        <button class="card-tab" data-t="trim">Trim</button>
+        <button class="card-tab" data-t="out">Output</button>
+      </div>
+
+      <div class="pane active" id="pane-dl">
+        <div class="sec">
+          <div class="bsc" id="bsc">
+            <div class="chips big" id="btype">
+              <button type="button" class="chip" data-v="video">Video</button>
+              <button type="button" class="chip" data-v="audio">Audio</button>
+            </div>
+            <div id="bqwrap"><div class="bsc-label">Quality</div><div class="chips" id="bq"></div></div>
+            <div class="bsc-sum" id="bsum"></div>
+          </div>
+          <div class="grid adv">
+            <div class="field"><label for="type">Type:</label>
+              <select class="sel" id="type"><option value="video">Video + Audio</option><option value="audio">Audio only</option></select></div>
+            <div class="field"><label for="fmt">Select Format:</label><select class="sel" id="fmt"></select></div>
+            <div class="field" id="qf"><label for="q">Select Quality:</label><select class="sel" id="q"></select></div>
+            <div class="field adv"><label for="aq">Audio Quality:</label>
+              <select class="sel" id="aq">
+                <option value="best">Best</option><option value="high">High</option><option value="medium">Medium</option><option value="low">Low</option>
+              </select></div>
+            <div class="field full hidden adv" id="trackf"><label for="track">Audio track:</label><select class="sel" id="track"></select></div>
+          </div>
+          <div class="hint" id="pickinfo" style="word-break:normal"></div>
+        </div>
+      </div>
+
+      <div class="pane" id="pane-subs">
+        <div class="sec">
+          <div class="opt"><div><b>Include subtitles</b><span class="s" id="subsnote">Embed a subtitle track or save it as a file</span></div>
+            <label class="sw"><input type="checkbox" id="subs"><i></i></label></div>
+          <div class="grid" style="margin-top:1rem">
+            <div class="field"><label for="sublang">Language:</label>
+              <select class="sel" id="sublang" disabled></select></div>
+            <div class="field"><label for="subfmt">Subtitle format:</label>
+              <select class="sel" id="subfmt" disabled>
+                <option value="embed">Embedded track</option><option value="srt">SRT file</option><option value="vtt">VTT file</option>
+              </select></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pane" id="pane-trim">
+        <div class="sec">
+          <div class="opt"><div><b>Trim video</b><span class="s">Only keep part of the video</span></div>
+            <label class="sw"><input type="checkbox" id="trim"><i></i></label></div>
+          <div class="grid" style="margin-top:1rem">
+            <div class="field"><label for="t1">Start:</label><input class="txt" id="t1" value="0:00" disabled></div>
+            <div class="field"><label for="t2">End:</label><input class="txt" id="t2" value="0:00" disabled></div>
+          </div>
+          <div class="hint" style="word-break:normal">Video cuts snap to the nearest keyframe (no re-encoding). Format: m:ss or h:mm:ss.</div>
+        </div>
+      </div>
+
+      <div class="pane" id="pane-out">
+        <div class="sec">
+          <div class="opt"><div><b>Embed thumbnail</b><span class="s" id="thumbnote">Use the cover as file artwork</span></div>
+            <label class="sw"><input type="checkbox" id="thumb"><i></i></label></div>
+          <div class="opt"><div><b>Write metadata</b><span class="s">Title, channel and upload date</span></div>
+            <label class="sw"><input type="checkbox" id="meta"><i></i></label></div>
+          <div class="field" style="margin-top:1rem"><label for="fn">File name:</label>
+            <input class="txt" id="fn">
+            <div class="hint" id="fnprev"></div></div>
+        </div>
+      </div>
+
+      <div class="summary"><span>Estimated size</span><b id="size">–</b></div>
+      <div class="card-foot">
+        <button class="modal-btn-secondary hidden" id="direct" type="button">Direct Download</button>
+        <button class="modal-btn-primary" id="start" type="button">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <span>Download</span>
+        </button>
+      </div>
+      <div class="smsg" id="dmsg"></div>
+    </div>
+
+    <div id="run">
+      <div class="sec">
+        <div class="prow"><span id="plabel">Starting download...</span><span id="ppct">0%</span></div>
+        <div class="ptrack"><div id="pbar"></div></div>
+        <div class="stats">
+          <div class="stat"><small>Downloaded</small><b id="s-mb">0 MB</b></div>
+          <div class="stat"><small>Speed</small><b id="s-sp">–</b></div>
+          <div class="stat"><small>Time left</small><b id="s-eta">–</b></div>
+        </div>
+      </div>
+      <div class="card-foot">
+        <button class="modal-btn-secondary" id="cancel" type="button">Cancel</button>
+        <button class="modal-btn-primary" id="done" type="button" style="display:none">Done</button>
+      </div>
+      <div class="smsg" id="smsg"></div>
+    </div>
+  </section>
+</main>
+
+<footer id="footer">
+  <p>Powered by <a href="https://github.com/TeamVivid/Vivid" target="_blank" rel="noopener">Vivid</a> | 1.0.0 | <a href="https://github.com/TeamVivid/YANID">Source Code</a> | <a href="https://github.com/TeamVivid/YANID/blob/main/LICENSE">License</a></p>
+</footer>
+
+<div class="backdrop" id="settings" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+  <div class="mbox">
+    <div class="mhead"><h2 id="settingsTitle">Settings</h2><button class="xbtn" id="settingsClose" aria-label="Close settings">&times;</button></div>
+    <div class="mtabs" id="mtabs">
+      <button class="mtab active" data-p="inst">Instance</button>
+      <button class="mtab" data-p="defs">Defaults</button>
+      <button class="mtab" data-p="codec">Codecs</button>
+      <button class="mtab" data-p="outp">Output</button>
+      <button class="mtab" data-p="look">Appearance</button>
+    </div>
+    <div class="mbody">
+<div class="mpane active" id="mp-inst">
+<div class="setting-item stack"><div class="setting-info"><label class="setting-label" for="s-instance">Vivid instance</label><div class="setting-desc">The used Vivid instance</div></div>
+<div class="stack-row"><input class="setting-input" id="s-instance" placeholder="https://vivid.errexe.xyz" spellcheck="false" autocomplete="off"><button class="modal-btn-secondary" id="s-test" type="button">Test</button></div>
+<div class="test-res" id="s-testres"></div></div>
+<div class="setting-item"><div class="setting-info"><label class="setting-label" for="s-source">Stream source</label><div class="setting-desc">SABR usually offers higher resolutions but needs more requests. Direct streams are faster when available.</div></div><select class="setting-select" id="s-source"><option value="auto">Automatic (direct first, SABR for higher qualities)</option><option value="direct">Direct only</option><option value="sabr">SABR only</option></select></div></div>
+<div class="mpane" id="mp-defs"><div class="setting-item"><div class="setting-info"><label class="setting-label" for="s-type">Default type</label><div class="setting-desc">What new downloads start with</div></div><select class="setting-select" id="s-type"><option value="video">Video + Audio</option><option value="audio">Audio only</option></select></div><div class="setting-item"><div class="setting-info"><label class="setting-label" for="s-maxq">Maximum quality</label><div class="setting-desc">Highest resolution to offer</div></div><select class="setting-select" id="s-maxq"><option value="0">Best available</option><option value="2160">2160p (4K)</option><option value="1440">1440p</option><option value="1080">1080p</option><option value="720">720p</option><option value="480">480p</option><option value="360">360p</option></select></div><div class="setting-item"><div class="setting-info"><label class="setting-label" for="s-vfmt">Video format</label><div class="setting-desc">Container for video downloads</div></div><select class="setting-select" id="s-vfmt"><option value="mkv">MKV</option><option value="mp4">MP4</option><option value="webm">WebM</option></select></div><div class="setting-item"><div class="setting-info"><label class="setting-label" for="s-afmt">Audio format</label><div class="setting-desc">Container for audio downloads</div></div><select class="setting-select" id="s-afmt"><option value="mp3">MP3</option><option value="m4a">M4A</option><option value="opus">Opus</option></select></div><div class="setting-item"><div class="setting-info"><label class="setting-label" for="s-aq">Audio quality</label><div class="setting-desc">Preferred audio stream bitrate</div></div><select class="setting-select" id="s-aq"><option value="best">Best</option><option value="high">High</option><option value="medium">Medium</option><option value="low">Low</option></select></div></div>
+<div class="mpane" id="mp-codec"><div class="setting-item"><div class="setting-info"><label class="setting-label" for="s-vcodec">Video codec</label><div class="setting-desc">Preferred codec for video streams</div></div><select class="setting-select" id="s-vcodec"><option value="auto">Automatic</option><option value="h264">H.264 (AVC)</option><option value="vp9">VP9</option><option value="av1">AV1</option></select></div><div class="setting-item"><div class="setting-info"><label class="setting-label" for="s-acodec">Audio codec</label><div class="setting-desc">Preferred codec for audio streams</div></div><select class="setting-select" id="s-acodec"><option value="auto">Automatic</option><option value="aac">AAC</option><option value="opus">Opus</option></select></div><div class="setting-item"><div class="setting-info"><label class="setting-label" for="s-strict">Strict video codec</label><div class="setting-desc">Only offer qualities available in the preferred codec</div></div><label class="setting-switch"><input type="checkbox" id="s-strict"><span class="setting-slider"></span></label></div><div class="setting-desc" style="padding:0 .25rem">If the preferred codec isn’t available for a quality, YANID picks the next best one.</div></div>
+<div class="mpane" id="mp-outp"><div class="setting-item"><div class="setting-info"><label class="setting-label" for="s-thumb">Embed thumbnail</label><div class="setting-desc">Default for new downloads</div></div><label class="setting-switch"><input type="checkbox" id="s-thumb"><span class="setting-slider"></span></label></div><div class="setting-item"><div class="setting-info"><label class="setting-label" for="s-meta">Write metadata</label><div class="setting-desc">Default for new downloads</div></div><label class="setting-switch"><input type="checkbox" id="s-meta"><span class="setting-slider"></span></label></div><div class="setting-item"><div class="setting-info"><label class="setting-label" for="s-subs">Include subtitles</label><div class="setting-desc">If available in the preferred language</div></div><label class="setting-switch"><input type="checkbox" id="s-subs"><span class="setting-slider"></span></label></div><div class="setting-item"><div class="setting-info"><label class="setting-label" for="s-sublang">Subtitle language</label><div class="setting-desc">Language to look for</div></div><select class="setting-select" id="s-sublang"><option value="en">English</option><option value="de">Deutsch</option><option value="es">Español</option><option value="fr">Français</option><option value="it">Italiano</option><option value="pt">Português</option><option value="ru">Русский</option><option value="ja">日本語</option><option value="ko">한국어</option><option value="zh">中文</option></select></div><div class="setting-item"><div class="setting-info"><label class="setting-label" for="s-subfmt">Subtitle format</label><div class="setting-desc">How subtitles are delivered</div></div><select class="setting-select" id="s-subfmt"><option value="embed">Embedded track</option><option value="srt">SRT file</option><option value="vtt">VTT file</option></select></div><div class="setting-item stack"><div class="setting-info"><label class="setting-label" for="s-pattern">File name pattern</label><div class="setting-desc">Placeholders: {title} {id} {quality} {author} {codec}</div></div><input class="setting-input" id="s-pattern" spellcheck="false"></div></div>
+<div class="mpane" id="mp-look"><div class="setting-item"><div class="setting-info"><label class="setting-label" for="s-theme">Theme</label><div class="setting-desc">Choose your visual color theme</div></div><select class="setting-select" id="s-theme"><option value="ember">Ember</option><option value="midnight">Midnight</option><option value="forest">Forest</option><option value="paper">Paper</option></select></div></div>
+    </div>
+    <div class="mfoot"><span id="s-saved"></span><div class="acts"><button class="modal-btn-secondary" id="s-reset" type="button">Reset to defaults</button><button class="modal-btn-primary" id="s-done" type="button">Done</button></div></div>
+  </div>
+</div>
+
+<script type="module" src="/src/main.js"></script>
+</body>
+</html>
